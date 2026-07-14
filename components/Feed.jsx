@@ -58,12 +58,6 @@ const Feed = () => {
     setTimeout(() => setCopied(false), 3000);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      handleSubmit(e);
-    }
-  };
-
     return (
         <section className="mt-16 w-full max-w-xl">
             <div className="flex flex-col w-full gap-2">
@@ -81,20 +75,20 @@ const Feed = () => {
                         placeholder="Enter a URL"
                         value={article.url}  // Make sure to bind the input value to the state
                         onChange={(e) => setArticle({ ...article, url: e.target.value })}
-                        onKeyDown={handleKeyDown}
                         required
                         className="url_input peer-focus:border-gray-700 peer-focus:text-gray-700"
                     />
 
-                    <button type="button" className="submit_btn" onClick={handleSubmit}>
-                        🗲
+                    <button type="submit" className="submit_btn" aria-label="Summarize article">
+                        <span aria-hidden="true">→</span>
                     </button>
                 </form>
 
                 {/* Browse History */}
         <div className='flex flex-col gap-1 max-h-60 overflow-y-auto'>
-          {allArticles.reverse().map((item, index) => (
-            <div
+          {[...allArticles].reverse().map((item, index) => (
+            <button
+              type="button"
               key={`link-${index}`}
               onClick={() => setArticle(item)}
               className='link_card'
@@ -110,7 +104,7 @@ const Feed = () => {
               <p className='flex-1 font-satoshi text-blue-700 font-medium text-sm truncate'>
                 {item.url}
               </p>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -121,7 +115,7 @@ const Feed = () => {
           <Image src={loader} height={20} width={20} alt='loader' className='w-20 h-20 object-contain' />
         ) : error ? (
           <p className='font-inter font-bold text-black text-center'>
-            Well, that wasn't supposed to happen...
+            Well, that wasn&apos;t supposed to happen...
             <br />
             <span className='font-satoshi font-normal text-gray-700'>
               {error?.data?.error}
